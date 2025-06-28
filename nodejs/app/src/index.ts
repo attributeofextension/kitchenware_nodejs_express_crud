@@ -1,14 +1,22 @@
-import express, { Express, Request, Response } from 'express';
+import "reflect-metadata"
+import "./config/di/container"
+import express from "express"
+import { AppDataSource } from "./config/db/database"
+import { productRouter } from './routes/product.routes'
 
-const app: Express = express();
-const port = process.env.PORT || 3000;
 
-app.use(express.json());
+const app = express()
 
-app.get('/', (req: Request, res: Response) => {
-    res.json({ message: 'Hello from TypeScript Express!' });
-});
+app.use('/api/products', productRouter)
 
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
+AppDataSource.initialize()
+    .then(() => {
+        console.log("Data Source has been initialized!")
+
+        app.listen(3000, () => {
+            console.log("Server is running on port 3000")
+        })
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization:", err)
+    })
