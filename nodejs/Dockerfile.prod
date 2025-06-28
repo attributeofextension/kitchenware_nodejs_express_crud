@@ -1,0 +1,29 @@
+# build
+
+FROM node:lts-alpine3.21 AS builder
+
+WORKDIR /usr/src/app
+
+COPY./app/package*.json ./
+
+RUN npm install
+
+COPY ./app/src ./usr/src/app/src
+
+RUN npm run build
+
+FROM node:lts-alpine3.21
+
+WORKDIR /usr/src/app
+
+COPY ./app/package*.json ./
+
+RUN npm install --only=production
+
+COPY --from=builder /usr/src/app/dist ./
+
+ENV NODE_ENV production
+
+USER node
+
+CMD ["node", "index.js"]
