@@ -7,9 +7,9 @@ export const AppDataSource = new DataSource({
     username: "postgres",
     password: "postgres",
     database: "productdb",
-    synchronize: true,
+    synchronize: false,
     logging: true,
     entities: [join(__dirname, "../../entities/**/*.ts")],
-    migrations: [],
+    migrations: [join(__dirname, "../../migrations/**/*.ts")],
     subscribers: []
 })

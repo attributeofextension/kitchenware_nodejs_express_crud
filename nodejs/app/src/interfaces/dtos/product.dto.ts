@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsUUID, IsOptional, Min, MaxLength } from "class-validator";
+import {IsString, IsNumber, IsUrl, IsOptional, Min, MaxLength, ValidateIf} from "class-validator";
 
 export class CreateProductDTO {
     @IsString()
@@ -13,6 +13,12 @@ export class CreateProductDTO {
     @MaxLength(1000)
     @IsOptional()
     description!: string;
+
+    @IsString()
+    @ValidateIf((o, value) => value !== '')
+    @IsUrl()
+    @IsOptional()
+    imageUrl?: string;
 }
 
 export class UpdateProductDTO {
@@ -30,6 +36,13 @@ export class UpdateProductDTO {
     @MaxLength(1000)
     @IsOptional()
     description?: string;
+
+    @IsString()
+    @ValidateIf((o, value) => value !== '')
+    @IsUrl()
+    @IsOptional()
+    imageUrl?: string;
+
 }
 
 export interface ProductResponseDTO {
@@ -37,4 +50,5 @@ export interface ProductResponseDTO {
     name: string;
     price: number;
     description: string;
+    imageUrl?: string;
 }

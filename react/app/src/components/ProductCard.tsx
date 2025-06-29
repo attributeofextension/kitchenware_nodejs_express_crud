@@ -1,15 +1,27 @@
 // src/components/ProductCard.tsx
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
+import {Box, Card, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import type {Product} from '../types/product';
+
 
 interface ProductCardProps {
     product: Product;
+    onClick: () => void;
+    onEdit: () => void;
+    onDelete: () => void;
+
 }
 
 const DEFAULT_IMAGE = '/vite.svg'; // We'll assume this exists in the public folder
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, onClick, onEdit, onDelete }: ProductCardProps) {
     const { name, price, imageUrl } = product;
+
+    const handleAction = (action: () => void) => (event: React.MouseEvent) => {
+        event.stopPropagation();
+        action();
+    };
+
 
     const formatPrice = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -19,7 +31,14 @@ export function ProductCard({ product }: ProductCardProps) {
     };
 
     return (
-        <Card>
+        <Card onClick={onClick} sx={{
+            cursor: 'pointer',
+            position: 'relative',
+            '&:hover .action-buttons': {
+                visibility: 'visible',
+                opacity: 1,
+            }
+        }}>
             <CardMedia
                 component="img"
                 height={200}
@@ -40,6 +59,37 @@ export function ProductCard({ product }: ProductCardProps) {
                     {formatPrice(price)}
                 </Typography>
             </CardContent>
+            {/* Action buttons overlay */}
+            <Box
+                className="action-buttons"
+                sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    opacity: 0,
+                    transition: 'opacity 0.2s',
+                    bgcolor: 'rgba(255, 255, 255, 0.8)',
+                    borderRadius: 1,
+                    display: 'flex',
+                    gap: 0.5
+                }}
+            >
+                <IconButton
+                    size="small"
+                    onClick={handleAction(onEdit)}
+                    sx={{ color: 'primary.main' }}
+                >
+                    <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                    size="small"
+                    onClick={handleAction(onDelete)}
+                    sx={{ color: 'error.main' }}
+                >
+                    <DeleteIcon fontSize="small" />
+                </IconButton>
+            </Box>
+
         </Card>
     );
 }

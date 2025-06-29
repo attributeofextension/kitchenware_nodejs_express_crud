@@ -27,6 +27,7 @@ import Dashboard from './pages/Dashboard.tsx';
 import Settings from "./pages/Settings.tsx";
 import Products from "./pages/Products.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
+import { AppStateProvider} from "./contexts/AppStateProvider.tsx";
 
 
 const drawerWidth = 240;
@@ -52,7 +53,7 @@ function Layout() {
             <AppBar position="fixed">
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Some Kitchenware CRUD App
+                        Some <del>Kitchenware</del> CRUD App
                     </Typography>
 
                     {/* Profile Menu */}
@@ -146,9 +147,11 @@ function Layout() {
 function App() {
     return (
         <ThemeProvider>
-            <BrowserRouter>
-                <Layout />
-            </BrowserRouter>
+            <AppStateProvider>
+                <BrowserRouter>
+                    <Layout />
+                </BrowserRouter>
+            </AppStateProvider>
         </ThemeProvider>
     );
 }

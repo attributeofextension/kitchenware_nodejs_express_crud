@@ -11,4 +11,7 @@ export class Product extends BaseEntity {
 
     @Column()
     description!: string
+
+    @Column({ nullable: true })
+    imageUrl!: string
 }

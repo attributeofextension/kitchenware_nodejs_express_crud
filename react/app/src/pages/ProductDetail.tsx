@@ -1,12 +1,38 @@
-// src/pages/ProductDetail.tsx
-import { Box, Typography, Paper } from '@mui/material';
-import type { Product } from '../types/product';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Typography, Paper, Button } from '@mui/material';
+import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import {useProduct, useProductsActions} from "../contexts/ProductsContext.tsx";
+import {useEffect} from "react";
 
-interface ProductDetailProps {
-    product: Product;
-}
 
-export default function ProductDetail({ product }: ProductDetailProps) {
+export default function ProductDetail() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const product = useProduct(id)
+    const actions = useProductsActions()
+
+    useEffect(() => {
+        actions.getById(id)
+    },[])
+
+    if (!product) {
+        return (
+            <Box sx={{ p: 3 }}>
+                <Typography variant="h6" color="error">
+                    Product not found
+                </Typography>
+                <Button
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => navigate('/products')}
+                    sx={{ mt: 2 }}
+                >
+                    Back to Products
+                </Button>
+            </Box>
+        );
+    }
+
+
     return (
         <Paper sx={{ p: 3, m: 2 }}>
             <Box>

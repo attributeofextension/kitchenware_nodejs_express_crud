@@ -9,7 +9,8 @@ export class ProductService {
             id: product.id,
             name: product.name,
             price: Number(product.price), // Convert Decimal to Number
-            description: product.description
+            description: product.description,
+            imageUrl: product.imageUrl,
         };
     }
 }
